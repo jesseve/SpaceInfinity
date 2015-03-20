@@ -9,8 +9,10 @@ public class LevelManager : GameManager {
 	public Vector3 bottomLeftCorner;
 
 	// Use this for initialization
-	void Start () {
+	public override void Awake () {
+		base.Awake();
 		upperRightCorner = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+		Debug.Log(upperRightCorner);
 		bottomLeftCorner = Camera.main.ScreenToWorldPoint(Vector3.zero);
 	}
 	
