@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\_Script\CollidableObject.cs" />
+     <Compile Include="Assets\_Script\DistanceManager.cs" />
      <Compile Include="Assets\_Script\GameManager.cs" />
      <Compile Include="Assets\_Script\InputManager.cs" />
      <Compile Include="Assets\_Script\Instances.cs" />

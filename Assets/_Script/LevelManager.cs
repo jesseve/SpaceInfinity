@@ -2,9 +2,7 @@
 using System.Collections;
 
 public class LevelManager : GameManager {
-
-	public static LevelManager instance;
-
+	
 	public Vector3 upperRightCorner;
 	public Vector3 bottomLeftCorner;
 
@@ -20,15 +18,21 @@ public class LevelManager : GameManager {
 	void Update () {
 	
 	}
-
-	/// <summary>
-	/// Initialize the static instance of level manager
-	/// </summary>
+	
 	protected override void SetupManager()
 	{
-		if (instance != null)
-			Destroy(instance);
-		
-		instance = this;
+	
+	}
+
+	public void StartGame() {
+
+	}
+
+	public void Pause() {
+
+	}
+
+	public void GameOver() {
+
 	}
 }

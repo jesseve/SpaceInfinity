@@ -5,11 +5,13 @@ public class PlayerManager : MonoBehaviour {
 
 	private Movement movement;
 	private PlayerHealth health;
+	private LevelManager levelManager;
 
 	// Use this for initialization
 	void Start () {
 		movement = GetComponent<Movement>();
 		health = GetComponent<PlayerHealth>();
+		levelManager = Instances.scripts.levelmanager;
 	}
 	
 	// Update is called once per frame
@@ -22,6 +24,10 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	public void HitObject(int damage) {
+		health.ApplyDamage(damage);
+	}
 
+	public void PlayerDie() {
+		levelManager.GameOver();
 	}
 }

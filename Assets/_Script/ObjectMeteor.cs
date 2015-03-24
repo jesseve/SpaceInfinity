@@ -3,8 +3,6 @@ using System.Collections;
 
 public class ObjectMeteor : CollidableObject {
 
-	private float speed;
-
 	private Vector3 targetPoint;	//Coordinates of the point the meteor will aim to
 
 	public override void Init ()
@@ -20,7 +18,7 @@ public class ObjectMeteor : CollidableObject {
 		base.Spawn();
 		targetPoint = new Vector3(Random.Range(minX, maxX), -topY);
 		float distance = Vector3.Distance(transform.position, targetPoint);
-		speed = distance * .25f;
-		GetComponent<Rigidbody2D>().velocity = (transform.position - targetPoint).normalized * -speed;
+		speed = distance / time;
+		GetComponent<Rigidbody2D>().velocity = (targetPoint - transform.position).normalized * speed;
 	}
 }

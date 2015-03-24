@@ -2,14 +2,12 @@
 using System.Collections;
 
 public class ObjectBird : CollidableObject {
-	
-	private float speed;
 
 	public override void Init ()
 	{
 		base.Init ();
 		spawnPoint = spawner.sideSpawnPoint;
-		speed = (maxX * 2) * .25f;
+		speed = (maxX * 2) / time;
 	}
 
 	public override void Spawn ()

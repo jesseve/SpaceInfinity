@@ -4,7 +4,6 @@ using System.Collections;
 public class Movement : MonoBehaviour {
 
 	public float speed;
-	//public float accelerateSpeed = 0.02f;
 	private Vector2 velocity;
 	private float gameAreaWidth;
 	private Rigidbody2D rb;
@@ -13,6 +12,7 @@ public class Movement : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody2D>();
 		velocity = new Vector3(speed, 0);
+
 		//Calculates the area player can move to
 		gameAreaWidth = (Camera.main.ScreenToWorldPoint(Vector3.right * Screen.width).x - Camera.main.ScreenToWorldPoint(Vector3.zero).x) * 0.5f;
 		gameAreaWidth -= transform.localScale.x * .5f;
@@ -25,7 +25,6 @@ public class Movement : MonoBehaviour {
 		position.x = Mathf.Clamp(position.x, -gameAreaWidth, gameAreaWidth);
 		if (position.x == x || CheckDirection(direction))
 		{
-			//acceleration = acceleration < 1 ? acceleration + accelerateSpeed : 1;
 			rb.velocity = velocity * direction;
 		}
 		else
