@@ -6,12 +6,12 @@ public class InputManager : MonoBehaviour {
 
 	private LevelManager manager;
 	private PlayerManager player;
-
-	private float trackMovementPosition;
+	
+	private float halfScreenHeight;
 
 	// Use this for initialization
-	void Start () {
-		trackMovementPosition = Screen.height * .5f;
+	public void Init () {
+		halfScreenHeight = Screen.height * .5f;
 		manager = Instances.scripts.levelmanager;
 		player = Instances.scripts.player;
 	}
@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour {
 		
 		//Decide whether the player moves to left or right        
 		if (Input.GetMouseButton(0)) {
-			if(Input.mousePosition.y <= trackMovementPosition)
+			if(Input.mousePosition.y <= halfScreenHeight)
 				direction = Input.mousePosition.x >= Screen.width * 0.5f ? 1 : -1;            
 		}
 		player.Move(direction);

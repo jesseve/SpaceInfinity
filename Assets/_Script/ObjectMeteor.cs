@@ -9,7 +9,6 @@ public class ObjectMeteor : CollidableObject {
 	{
 		base.Init ();
 		spawnPoint = spawner.upperSpawnPoint;
-		Debug.Log(speed);
 	}
 	
 	public override void Spawn ()

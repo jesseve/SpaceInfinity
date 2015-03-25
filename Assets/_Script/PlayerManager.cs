@@ -5,18 +5,28 @@ public class PlayerManager : MonoBehaviour {
 
 	private Movement movement;
 	private PlayerHealth health;
+	private InputManager input;
+	private DistanceManager distance;
+
 	private LevelManager levelManager;
 
 	// Use this for initialization
-	void Start () {
+	public void Init () {
 		movement = GetComponent<Movement>();
 		health = GetComponent<PlayerHealth>();
+		input = GetComponent<InputManager>();
+		distance = GetComponent<DistanceManager>();
+
 		levelManager = Instances.scripts.levelmanager;
+
+		health.Init();
+		input.Init();
+		movement.Init ();
+		distance.Init ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public void StartGame() {
+
 	}
 
 	public void Move(int direction){

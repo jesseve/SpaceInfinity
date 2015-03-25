@@ -22,7 +22,7 @@ public class DistanceManager : MonoBehaviour {
 	public float Speed { get { return speed; } }
 
 	// Use this for initialization
-	void Start () {
+	public void Init () {
 		manager = GetComponent<PlayerManager>();
 		levelManager = Instances.scripts.levelmanager;
 	}

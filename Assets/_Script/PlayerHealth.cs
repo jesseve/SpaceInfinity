@@ -9,16 +9,8 @@ public class PlayerHealth : MonoBehaviour {
 	public int maxHits = 3;
 
 	// Use this for initialization
-	void Start () {
+	public void Init () {
 		manager = GetComponent<PlayerManager>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-	public void Init() {
 		health = maxHits;
 	}
 

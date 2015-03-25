@@ -9,7 +9,7 @@ public class Movement : MonoBehaviour {
 	private Rigidbody2D rb;
 	
 	// Use this for initialization
-	void Start () {
+	public void Init () {
 		rb = GetComponent<Rigidbody2D>();
 		velocity = new Vector3(speed, 0);
 

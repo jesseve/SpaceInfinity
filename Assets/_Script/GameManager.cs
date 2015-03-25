@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour {
 	public static readonly Vector2 screenScale = new Vector2(1920, 1080);
 	public delegate void ResolutionChanged();
 	public static event ResolutionChanged resolutionChanged = delegate { };
+
+	public delegate void ChangeState();
+	public event ChangeState changeState;
+
 	private int screenWidth;
 	private int screenHeight;
 	
@@ -16,14 +20,16 @@ public class GameManager : MonoBehaviour {
 	
 	
 	
-	public virtual void Awake()
+	public virtual void Start()
 	{        
 		
 		screenWidth = Screen.width;
 		screenHeight = Screen.height;
+
+		SetState(startState);
+
 		if (GameObject.FindGameObjectsWithTag("Manager").Length > 1)
 			Debug.Log("More than 1 manager in the scene!");
-		SetupManager();
 	}
 	
 	public virtual void Update()
@@ -37,10 +43,6 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	
-	protected virtual void SetupManager(){
-		SetState(startState);
-	}
-	
 	/// <summary>
 	/// Sets the current state of the GameManager.
 	/// </summary>
@@ -48,6 +50,7 @@ public class GameManager : MonoBehaviour {
 	public void SetState(State state)
 	{
 		e_state = state;
+		if(changeState != null) changeState();
 	}
 	
 	/// <summary>

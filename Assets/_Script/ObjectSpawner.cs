@@ -21,7 +21,7 @@ public class ObjectSpawner : MonoBehaviour {
 	private int maxObjects = 3;
 
 	// Use this for initialization
-	void Awake () {
+	public void Init () {
 		manager = Instances.scripts.levelmanager;
 		objects = new List<GameObject>();
 		objectScripts = new List<CollidableObject>();
@@ -45,6 +45,10 @@ public class ObjectSpawner : MonoBehaviour {
 		}
 	}
 
+	public void StartGame() {
+		
+	}
+
 	private void CreateObjectPool() {
 		for(int i = 0; i < objectsToSpawn.Length; i++) {
 			for(int j = 0; j < uniquePoolAmount; j++) {
@@ -55,10 +59,6 @@ public class ObjectSpawner : MonoBehaviour {
 				co.Init();
 			}
 		}
-	}
-
-	public void GameStarted() {
-
 	}
 
 	private void SpawnObject() {

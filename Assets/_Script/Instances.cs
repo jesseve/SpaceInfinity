@@ -9,6 +9,7 @@ public class Instances : MonoBehaviour {
 	//public PlayerHealth health;
 	public LevelManager levelmanager;
 	public ObjectSpawner spawner;
+	public CanvasManager canvas;
 
 	// Use this for initialization
 	void Awake () {
