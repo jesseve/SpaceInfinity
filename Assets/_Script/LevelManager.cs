@@ -33,21 +33,21 @@ public class LevelManager : GameManager {
 		player.StartGame();
 		spawner.StartGame();
 
-		SetState(State.Running);
+		//SetState(State.Running);
 	}
 
 	public void Pause() {
-		if(GetState() == State.Pause) {
+		/*if(GetState() == State.Pause) {
 			SetState(State.Running);
 		} else if(GetState() == State.Running) {
 			SetState(State.Pause);
-		}
+		}*/
 	}
 
 	public void GameOver() {
 
 		spawner.GameOver();
 
-		SetState(State.GameOver);
+		//SetState(State.GameOver);
 	}
 }

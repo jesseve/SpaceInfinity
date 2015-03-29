@@ -1,17 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Script\ObjectSpawner.cs">
     <Files>
-      <File FileName="Assets\_Script\ObjectSpawner.cs" Line="73" Column="63" />
-      <File FileName="Assets\_Script\BackGroundScript.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\LevelManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\ShowPlayerHealth.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\PlayerManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\PlayerHealth.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Script\LevelManager.cs" Line="51" Column="5" />
+      <File FileName="Assets\_Script\GameManager.cs" Line="35" Column="2" />
+      <File FileName="Assets\_Script\ObjectSpawner.cs" Line="41" Column="22" />
       <File FileName="Assets\_Script\CollidableObject.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\ObjectBalloon.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\ObjectBird.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\ObjectMeteor.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Script\CanvasManager.cs" Line="36" Column="6" />
+      <File FileName="Assets\_Script\PlayerManager.cs" Line="37" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

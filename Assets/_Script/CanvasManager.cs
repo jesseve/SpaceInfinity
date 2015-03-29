@@ -14,13 +14,13 @@ public class CanvasManager : MonoBehaviour {
 	// Use this for initialization
 	public void Init () {
 		levelManager = Instances.scripts.levelmanager;
-		levelManager.changeState += ChangeGameState;
+//		levelManager.changeState += ChangeGameState;
 
 		ChangeGameState();
 	}
 
 	private void ChangeGameState() {
-		switch(levelManager.GetState()) {
+		/*switch(levelManager.GetState()) {
 		case State.Menu:
 			SetCanvas(menuCanvas);
 			break;
@@ -33,7 +33,7 @@ public class CanvasManager : MonoBehaviour {
 		case State.GameOver:
 			SetCanvas(gameoverCanvas);
 			break;
-		}
+		}*/
 	}
 
 	private void SetCanvas(Canvas canvas) {

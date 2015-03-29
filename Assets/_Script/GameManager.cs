@@ -12,7 +12,7 @@ public class GameManager : StateMachine
 	private int screenWidth;
 	private int screenHeight;
 	
-	protected virtual void Start()
+	public virtual void Start()
 	{        	
 		screenWidth = Screen.width;
 		screenHeight = Screen.height;

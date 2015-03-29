@@ -20,8 +20,8 @@ public class PlayerManager : MonoBehaviour {
 		levelManager = Instances.scripts.levelmanager;
 
 		health.Init();
-		input.Init();
-		movement.Init ();
+		//input.Init();
+		//movement.Init ();
 		distance.Init ();
 	}
 
@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	public void Move(int direction){
-		movement.Move(direction);
+		//movement.Move(direction);
 	}
 
 	public void HitObject(int damage) {

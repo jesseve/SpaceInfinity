@@ -62,6 +62,16 @@
      <Compile Include="Assets\_Script\PlayerHealth.cs" />
      <Compile Include="Assets\_Script\PlayerManager.cs" />
      <Compile Include="Assets\_Script\ShowPlayerHealth.cs" />
+     <Compile Include="Assets\_Script\SplashScreen\FrontPageManager.cs" />
+     <Compile Include="Assets\_Script\SplashScreen\SplashScreen.cs" />
+     <Compile Include="Assets\_Script\Tech\AudioManager.cs" />
+     <Compile Include="Assets\_Script\Tech\Input\InputClasses.cs" />
+     <Compile Include="Assets\_Script\Tech\Input\TouchControlHandler.cs" />
+     <Compile Include="Assets\_Script\Tech\Input\TouchInputController.cs" />
+     <Compile Include="Assets\_Script\Tech\Input\TouchInputManager.cs" />
+     <Compile Include="Assets\_Script\Tech\JSONObject.cs" />
+     <Compile Include="Assets\_Script\Tech\ObjectPool.cs" />
+     <Compile Include="Assets\_Script\Tech\StateMachine.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
