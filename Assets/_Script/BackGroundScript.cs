@@ -47,7 +47,6 @@ public class BackGroundScript : MonoBehaviour {
 	/// Manages the positions of the backgrounds
 	/// </summary>
 	void FixedUpdate () {
-        //if (LevelManager.instance.GetState() != State.Running) return;
         AccelerateScrolling();
         t1.Translate(0, -scrollingSpeed, 0);       
         if (t1.position.y <= endPosition.y)
@@ -75,7 +74,8 @@ public class BackGroundScript : MonoBehaviour {
         sprite2.sprite = s;
         sprite3.sprite = s;
         float height = (Camera.main.ScreenToWorldPoint(Vector3.up * Screen.height).y - Camera.main.ScreenToWorldPoint(Vector3.zero).y);
-		float area = 0;//LevelManager.instance.GameAreaWidth;        
+		float area = 5;
+		Debug.Log(area);
         float spriteWidth = s.rect.width;
         float spriteHeight = s.rect.height;
         float newScaleX = area / (spriteWidth * 0.01f);

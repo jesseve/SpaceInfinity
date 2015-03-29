@@ -15,6 +15,8 @@ public class CanvasManager : MonoBehaviour {
 	public void Init () {
 		levelManager = Instances.scripts.levelmanager;
 		levelManager.changeState += ChangeGameState;
+
+		ChangeGameState();
 	}
 
 	private void ChangeGameState() {

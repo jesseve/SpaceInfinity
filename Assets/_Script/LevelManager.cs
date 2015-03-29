@@ -45,6 +45,9 @@ public class LevelManager : GameManager {
 	}
 
 	public void GameOver() {
+
+		spawner.GameOver();
+
 		SetState(State.GameOver);
 	}
 }

@@ -18,6 +18,12 @@ public class ObjectBird : CollidableObject {
 
 	}
 
+	protected override void IsOutOfBounds() {
+		base.IsOutOfBounds();
+		if(transform.position.x > maxX)
+			ReturnToPool();
+	}
+
 	void Update() {
 
 	}

@@ -9,11 +9,15 @@ public class ObjectSpawner : MonoBehaviour {
 	private List<CollidableObject> objectScripts;
 	public int uniquePoolAmount = 4;
 
+	public GameObject objectParent;
+
 	private LevelManager manager;
 
+	//All values in world space
 	public float maxX;				//The x-coordinate of the right side of screen
 	public float minX;				//The x-coordinate of the left side of screen
 	public float topY;				//The y-coordinate of top of screen
+	public float minY;				//The y-coordinate of the bottom of the screen
 
 	public Vector3 upperSpawnPoint;
 	public Vector3 sideSpawnPoint;
@@ -29,6 +33,7 @@ public class ObjectSpawner : MonoBehaviour {
 		maxX = manager.upperRightCorner.x;
 		minX = manager.bottomLeftCorner.x;
 		topY = manager.upperRightCorner.y;
+		minY = manager.bottomLeftCorner.y;
 
 		upperSpawnPoint = new Vector3(0, topY);
 		sideSpawnPoint = new Vector3(minX, 0);
@@ -49,6 +54,17 @@ public class ObjectSpawner : MonoBehaviour {
 		
 	}
 
+	public void GameOver() {
+		ResetPool();
+	}
+
+	public void ResetPool() {
+		foreach(CollidableObject co in objectScripts) {
+			if(co.Used)
+				co.ReturnToPool();
+		}
+	}
+
 	private void CreateObjectPool() {
 		for(int i = 0; i < objectsToSpawn.Length; i++) {
 			for(int j = 0; j < uniquePoolAmount; j++) {
@@ -57,11 +73,22 @@ public class ObjectSpawner : MonoBehaviour {
 				CollidableObject co = go.GetComponent<CollidableObject>();
 				objectScripts.Add(co);
 				co.Init();
+				go.transform.parent = objectParent.transform;
 			}
 		}
 	}
 
 	private void SpawnObject() {
-		objectScripts[Random.Range(0, objectScripts.Count)].Spawn();
+		List<CollidableObject> free = new List<CollidableObject>();
+
+		for(int i = 0; i < objectScripts.Count; i++) {
+			if(!objectScripts[i].Used) {
+				free.Add(objectScripts[i]);
+			}
+		}
+
+
+		if(free.Count > 0)
+			free[Random.Range(0, free.Count)].Spawn();
 	}
 }

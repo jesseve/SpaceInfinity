@@ -14,6 +14,7 @@ public class CollidableObject : MonoBehaviour {
 	protected float topY;
 	protected float minX;
 	protected float maxX;
+	protected float minY;
 
 	protected float speed;	//The speed the object will travel with
 	
@@ -22,10 +23,17 @@ public class CollidableObject : MonoBehaviour {
 
 	public Vector3 spawnPoint;
 
+	protected Rigidbody2D rigidbody;
+
 	public virtual void OnTriggerEnter2D(Collider2D other) {
 		if(other.tag.Equals("Player")) {
 			HitPlayer();
 		}
+	}
+
+	protected virtual void IsOutOfBounds() {
+		if(transform.position.y < minY)
+			ReturnToPool();
 	}
 
 	public virtual void Init() {
@@ -34,12 +42,16 @@ public class CollidableObject : MonoBehaviour {
 		spawner = Instances.scripts.spawner;
 		isUsed = false;
 
-		topY = spawner.topY;
 		minX = spawner.minX;
 		maxX = spawner.maxX;
 
 		//set the scale so that the object is certain percentage of the screen width
 		transform.localScale = new Vector3(size * 0.02f * maxX, size * 0.02f * maxX);
+
+		topY = spawner.topY;
+		minY = spawner.minY - (transform.localScale.y * 0.5f);
+
+		rigidbody = GetComponent<Rigidbody2D>();
 	}
 
 	public virtual void HitPlayer(){
@@ -50,10 +62,15 @@ public class CollidableObject : MonoBehaviour {
 	public virtual void Spawn() {
 		transform.position = spawnPoint;
 		isUsed = true;
+		InvokeRepeating("IsOutOfBounds", 1, 2);
 		//Debug.Log("Spawnpoint: " + spawnPoint + " Position" + transform.position);
 	}
 
 	public virtual void ReturnToPool() {
+		if(IsInvoking("IsOutOfBounds"))
+		   CancelInvoke("IsOutOfBounds");
 		isUsed = false;
+		rigidbody.velocity = Vector2.zero;
+		transform.position = Vector3.up * 200;
 	}
 }

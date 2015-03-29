@@ -25,8 +25,12 @@ public class PlayerManager : MonoBehaviour {
 		distance.Init ();
 	}
 
-	public void StartGame() {
+	public int GetPlayerHealth() {
+		return health.Health;
+	}
 
+	public void StartGame() {
+		health.Reset();
 	}
 
 	public void Move(int direction){
