@@ -1,43 +1,104 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerManager : MonoBehaviour {
+public class PlayerManager : StateMachine 
+{
 
-	private Movement movement;
-	private PlayerHealth health;
-	private InputManager input;
-	private DistanceManager distance;
+#region Variables
 
-	private LevelManager levelManager;
+	[SerializeField] private float speedRotation = 100;
+	[SerializeField] private GameObject inputGameObject = null;
+	private IMovement movement = null;
+	private ITouchInputEventHandler inputEvent = null;
+	private bool isTapping = false;
+	private Vector3 position = Vector3.zero;
 
-	// Use this for initialization
-	public void Init () {
-		movement = GetComponent<Movement>();
-		health = GetComponent<PlayerHealth>();
-		input = GetComponent<InputManager>();
-		distance = GetComponent<DistanceManager>();
+#endregion
 
-		levelManager = Instances.scripts.levelmanager;
+#region Unity lifecycle
 
-		health.Init();
-		input.Init();
-		movement.Init ();
-		distance.Init ();
+	private void Awake () 
+	{
+		movement = new Movement(this.gameObject,speedRotation) as IMovement;
+
+		if(inputGameObject == null)
+		{
+			inputGameObject = GameObject.Find ("InputSystem");
+		}
+		inputEvent = (ITouchInputEventHandler)inputGameObject.GetComponent(typeof(ITouchInputEventHandler));
+		if(inputEvent != null)
+		{
+			inputEvent.OnTap += HandleOnTap;
+			inputEvent.OnRemove += HandlOnRemove;
+		}
+		InitStateMachine(true);
 	}
 
-	public void StartGame() {
-
+	private void Update()
+	{
+		StateUpdate();
 	}
 
-	public void Move(int direction){
-		movement.Move(direction);
+#endregion
+
+#region StateMachine
+
+	private void UpdateIdle()
+	{
+		if(isTapping)
+		{
+			RequestState(State.Rotate);
+		}
+	}
+	private void EnterReset(string oldState)
+	{
+		isTapping = false;
+	}
+	private void UpdateReset()
+	{
+		if(isTapping)
+		{
+			RequestState("Rotate");
+			return;
+		}
+		if(movement.ResetShipRotation() == true)
+		{
+			RequestState(State.Idle);
+		}
+	}
+	private void EnterRotate(string oldState)
+	{
+		isTapping = false;
+	}
+	private void UpdateRotate()
+	{
+		movement.RotateShip(position);
+	}
+	
+	private void HandleOnTap (Vector3 position)
+	{
+		this.position = position;
+		isTapping = true;
+	}
+	private void HandlOnRemove(Vector3 position)
+	{
+		RequestState(State.Reset);
 	}
 
-	public void HitObject(int damage) {
-		health.ApplyDamage(damage);
+	protected override void InitStateMachine(bool debug)
+	{
+		InitializeStateMachine(debug);
+		AddStateWithTransitions(State.Idle, new string[]{State.Rotate});
+		AddStateWithTransitions(State.Rotate, new string[]{State.Reset});
+		AddStateWithTransitions(State.Reset, new string[]{State.Rotate, State.Idle});
+		RequestState(State.Idle);
+	}
+	class State{
+		public static string Reset = "Reset";
+		public static string Rotate = "Rotate";
+		public static string Idle = "Idle";
 	}
 
-	public void PlayerDie() {
-		levelManager.GameOver();
-	}
+#endregion
+
 }
