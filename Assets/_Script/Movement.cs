@@ -1,52 +1,81 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class Movement : MonoBehaviour {
+public interface IMovement
+{
+	bool ResetShipRotation();
+	void RotateShip(Vector3 tapPosition);
+}
 
-	public float speed;
-	private Vector2 velocity;
-	private float gameAreaWidth;
-	private Rigidbody2D rb;
-	
-	// Use this for initialization
-	public void Init () {
-		rb = GetComponent<Rigidbody2D>();
-		velocity = new Vector3(speed, 0);
+public class Movement : IDisposable , IMovement
+{
 
-		//Calculates the area player can move to
-		gameAreaWidth = (Camera.main.ScreenToWorldPoint(Vector3.right * Screen.width).x - Camera.main.ScreenToWorldPoint(Vector3.zero).x) * 0.5f;
-		gameAreaWidth -= transform.localScale.x * .5f;
-	}
+	private float speed = 0f;
+	private float halfWidth = 0f;
+	private Transform transform = null;
 
-
-	public void Move(int direction){
-		Vector3 position = transform.position;
-		float x = position.x;
-		position.x = Mathf.Clamp(position.x, -gameAreaWidth, gameAreaWidth);
-		if (position.x == x || CheckDirection(direction))
-		{
-			rb.velocity = velocity * direction;
-		}
-		else
-		{
-			transform.position = new Vector3(gameAreaWidth * Mathf.Sign(position.x), position.y);
-			rb.velocity = Vector2.zero;
-		}        
-	}
-	private bool CheckDirection(int direction) 
+	public Movement(GameObject gameObject, float speed)
 	{
-		if (Mathf.Sign(direction) != Mathf.Sign(transform.position.x) && direction != 0)
-			return true;
-		return false;
+		transform = gameObject.transform;
+		this.speed = speed;
+		halfWidth = Screen.width / 2f;
 	}
 
-	private float CalculatePlayerWidth() {
-		SpriteRenderer s = GetComponent<SpriteRenderer>();
-		float center = s.bounds.center.x;
-		float side = s.bounds.max.x;
-		Debug.Log("return: " + (center - side));
-		Debug.Log("Side: " + side);
-		Debug.Log("Center: " + center);
-		return center - side;
+	/// <summary>
+	/// Resets the ship rotation. Returns true if ship rotation is fully done
+	/// </summary>
+	/// <returns><c>true</c>, if ship rotation is fully done, <c>false</c> otherwise.</returns>
+	public bool ResetShipRotation()
+	{
+		float angle = transform.eulerAngles.z; 
+		if(Mathf.Approximately(angle, 0f) == false)
+		{
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0f,0f,0f), Time.deltaTime *speed );
+			return false;
+		}
+		return true;
 	}
+
+	public void RotateShip(Vector3 tapPosition)
+	{
+		float polarity = (tapPosition.x < halfWidth) ? 1f : -1f;
+		transform.Rotate(Vector3.forward, polarity * Time.deltaTime * speed);
+		float angle = transform.eulerAngles.z;
+		transform.eulerAngles = new Vector3(0f, 0f, ClampAngle(angle, -45f,45f));
+	}
+
+	private float ClampAngle(float angle, float min, float max)
+	{
+		if(angle < 90f || angle > 270f)
+		{
+			if(angle > 180)
+			{
+				angle -= 360f;
+			}
+			if(max > 180)
+			{
+				max -= 360f;
+			}
+			if(min > 180)
+			{
+				min -=360f;
+			}
+		}
+		angle = Mathf.Clamp (angle, min, max);
+		if(angle < 0)
+		{
+			angle += 360f;
+		}
+		return angle;
+	}
+
+	#region IDisposable implementation
+
+	public void Dispose ()
+	{
+		GC.SuppressFinalize(this);
+	}
+
+	#endregion
 }
