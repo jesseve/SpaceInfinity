@@ -1,27 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerManager : MonoBehaviour {
-
-	private Movement movement;
+public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
+	
 	private PlayerHealth health;
-	private InputManager input;
 	private DistanceManager distance;
 
+	private Movement movement;
+	
 	private LevelManager levelManager;
 
 	// Use this for initialization
 	public void Init () {
-		movement = GetComponent<Movement>();
 		health = GetComponent<PlayerHealth>();
-		input = GetComponent<InputManager>();
 		distance = GetComponent<DistanceManager>();
 
 		levelManager = Instances.scripts.levelmanager;
 
+		if(movement == null) movement = new Movement(this.gameObject, 5.0f);
+
 		health.Init();
-		//input.Init();
-		//movement.Init ();
 		distance.Init ();
 	}
 
@@ -33,10 +31,6 @@ public class PlayerManager : MonoBehaviour {
 		health.Reset();
 	}
 
-	public void Move(int direction){
-		//movement.Move(direction);
-	}
-
 	public void HitObject(int damage) {
 		health.ApplyDamage(damage);
 	}
@@ -44,4 +38,36 @@ public class PlayerManager : MonoBehaviour {
 	public void PlayerDie() {
 		levelManager.GameOver();
 	}
+
+	private void RotateShip(Vector3 tapPosition) {
+		movement.Reset = false;
+		movement.RotateShip(tapPosition);
+	}
+	private void ResetShip(Vector3 tapPosition) {
+		movement.Reset = true;
+		StartCoroutine(ResetShipRotation());
+	}
+	private IEnumerator ResetShipRotation() {
+		while(!movement.ResetShipRotation() && movement.Reset) {
+			yield return null;
+		}
+	}
+
+
+	#region ITouchInputEventListener implementation
+
+	public void Register (ITouchInputEventHandler handler)
+	{
+		if(movement == null) movement = new Movement(this.gameObject, 25.0f);
+		handler.OnTap += RotateShip;
+		handler.OnRemove += ResetShip;
+
+	}
+
+	public void Unregister (ITouchInputEventHandler handler)
+	{
+		handler.OnTap -= RotateShip;
+	}
+
+	#endregion
 }

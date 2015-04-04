@@ -15,6 +15,8 @@ public class Movement : IDisposable , IMovement
 	private float halfWidth = 0f;
 	private Transform transform = null;
 
+	public bool Reset;
+
 	public Movement(GameObject gameObject, float speed)
 	{
 		transform = gameObject.transform;

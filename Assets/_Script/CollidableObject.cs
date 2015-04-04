@@ -38,7 +38,7 @@ public class CollidableObject : MonoBehaviour {
 
 	public virtual void Init() {
 
-		//player = Instances.scripts.player;
+		player = Instances.scripts.player;
 		spawner = Instances.scripts.spawner;
 		isUsed = false;
 
@@ -55,7 +55,7 @@ public class CollidableObject : MonoBehaviour {
 	}
 
 	public virtual void HitPlayer(){
-		//player.HitObject(damage);
+		player.HitObject(damage);
 		ReturnToPool();
 	}
 
@@ -72,5 +72,7 @@ public class CollidableObject : MonoBehaviour {
 		isUsed = false;
 		rigidbody.velocity = Vector2.zero;
 		transform.position = Vector3.up * 200;
+
+		spawner.ReturnToPool(this.gameObject);
 	}
 }

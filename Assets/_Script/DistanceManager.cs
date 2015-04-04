@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class DistanceManager : MonoBehaviour {
@@ -10,6 +11,8 @@ public class DistanceManager : MonoBehaviour {
 
 	//checkpoints when the player reaches the next athmosphere
 	public float[] checkpoints;
+
+	public Text distanceMeter;
 
 	//The distance the player has travelled
 	private float distance;
@@ -23,8 +26,15 @@ public class DistanceManager : MonoBehaviour {
 
 	// Use this for initialization
 	public void Init () {
+		speed = 5;
+
 		manager = GetComponent<PlayerManager>();
 		levelManager = Instances.scripts.levelmanager;
+	}
+
+	void Update() {
+		distance += speed * Time.deltaTime;
+		distanceMeter.text = "Distance:" + distance.ToString("n0");
 	}
 
 }

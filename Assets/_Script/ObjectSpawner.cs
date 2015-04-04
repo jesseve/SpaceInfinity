@@ -5,9 +5,8 @@ using System.Collections.Generic;
 public class ObjectSpawner : MonoBehaviour {
 
 	public GameObject[] objectsToSpawn;	//Contains the objects to spawn. Balloon, Meteor and Bird
-	private List<GameObject> objects;
-	private List<CollidableObject> objectScripts;
-	public int uniquePoolAmount = 4;
+	
+	public int amount = 4;
 
 	public GameObject objectParent;
 
@@ -23,12 +22,13 @@ public class ObjectSpawner : MonoBehaviour {
 	public Vector3 sideSpawnPoint;
 
 	private int maxObjects = 3;
+	private int objectsUsed = 0;
+
+	private string spawningMethod = "SpawningUpdate";
 
 	// Use this for initialization
 	public void Init () {
 		manager = Instances.scripts.levelmanager;
-		objects = new List<GameObject>();
-		objectScripts = new List<CollidableObject>();
 
 		maxX = manager.upperRightCorner.x;
 		minX = manager.bottomLeftCorner.x;
@@ -40,7 +40,7 @@ public class ObjectSpawner : MonoBehaviour {
 
 		CreateObjectPool();
 
-		//Debug.Log("Min X: " + minX + " MaxX: " + maxX + " TopY: " + topY + " Upper: " + upperSpawnPoint + " Side: " + sideSpawnPoint);
+		StartGame();
 	}
 	
 	// Update is called once per frame
@@ -51,7 +51,7 @@ public class ObjectSpawner : MonoBehaviour {
 	}
 
 	public void StartGame() {
-		
+		Invoke (spawningMethod, 5);
 	}
 
 	public void GameOver() {
@@ -59,36 +59,55 @@ public class ObjectSpawner : MonoBehaviour {
 	}
 
 	public void ResetPool() {
-		foreach(CollidableObject co in objectScripts) {
-			if(co.Used)
-				co.ReturnToPool();
+
+	}
+
+	private void SpawningUpdate() {
+		bool chance = Random.Range(0, 2) > 0;
+
+		if(chance == true) {
+			SpawnObject();
 		}
+		Invoke (spawningMethod, 1);
 	}
 
 	private void CreateObjectPool() {
 		for(int i = 0; i < objectsToSpawn.Length; i++) {
-			for(int j = 0; j < uniquePoolAmount; j++) {
-				GameObject go = Instantiate(objectsToSpawn[i], Vector3.up * 200f, Quaternion.identity) as GameObject;
-				objects.Add(go);
-				CollidableObject co = go.GetComponent<CollidableObject>();
-				objectScripts.Add(co);
-				co.Init();
-				go.transform.parent = objectParent.transform;
+			ObjectPool.Instance.AddToPool(objectsToSpawn[i], amount, objectParent.transform);
+
+			for(int j = 0; j < amount; j++) {
+				GameObject g = ObjectPool.Instance.PopFromPool(objectsToSpawn[i]);
+				g.GetComponent<CollidableObject>().Init();
+
+				g.name = g.name.Split('(')[0];
+
+				ObjectPool.Instance.PushToPool(ref objectsToSpawn[i], ref g, objectParent.transform);
 			}
 		}
 	}
 
 	private void SpawnObject() {
-		List<CollidableObject> free = new List<CollidableObject>();
+		if(objectsUsed >= maxObjects) return;
 
-		for(int i = 0; i < objectScripts.Count; i++) {
-			if(!objectScripts[i].Used) {
-				free.Add(objectScripts[i]);
+		GameObject go = ObjectPool.Instance.PopFromPool(objectsToSpawn[Random.Range(0, objectsToSpawn.Length)]);
+
+		if(go == null) return;
+
+		CollidableObject co = go.GetComponent<CollidableObject>();
+		//co.Init();
+		co.Spawn();
+
+		objectsUsed++;
+	}
+
+	public void ReturnToPool(GameObject go) {
+		for(int i = 0; i < objectsToSpawn.Length; i++) {
+			if(objectsToSpawn[i].name.Equals(go.name))
+			{
+				ObjectPool.Instance.PushToPool(ref objectsToSpawn[i], ref go, objectParent.transform);
+
+				objectsUsed--;
 			}
 		}
-
-
-		if(free.Count > 0)
-			free[Random.Range(0, free.Count)].Spawn();
 	}
 }

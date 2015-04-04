@@ -57,6 +57,7 @@
      <Compile Include="Assets\_Script\Movement.cs" />
      <Compile Include="Assets\_Script\ObjectBalloon.cs" />
      <Compile Include="Assets\_Script\ObjectBird.cs" />
+     <Compile Include="Assets\_Script\ObjectManager.cs" />
      <Compile Include="Assets\_Script\ObjectMeteor.cs" />
      <Compile Include="Assets\_Script\ObjectSpawner.cs" />
      <Compile Include="Assets\_Script\PlayerHealth.cs" />
