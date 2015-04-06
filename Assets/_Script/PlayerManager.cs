@@ -3,25 +3,34 @@ using System.Collections;
 
 public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
 	
-	private PlayerHealth health;
-	private DistanceManager distance;
+	private PlayerHealth health = null;
+	private Movement movement = null;
+	private LevelManager levelManager = null;
 
-	private Movement movement;
-	
-	private LevelManager levelManager;
+#region Unity lifecycle
 
-	// Use this for initialization
-	public void Init () {
-		health = GetComponent<PlayerHealth>();
-		distance = GetComponent<DistanceManager>();
+	private void Start () {
+		health = new PlayerHealth(this);
+		GameObject gameManager = GameObject.Find ("GameManager");
+		levelManager = gameManager.GetComponent<LevelManager>();
+		levelManager.OnStartGame += StartGame;
 
-		levelManager = Instances.scripts.levelmanager;
-
-		if(movement == null) movement = new Movement(this.gameObject, 5.0f);
-
-		health.Init();
-		distance.Init ();
+		if(movement == null) 
+		{
+			movement = new Movement(this.gameObject, 5.0f);
+		}
 	}
+
+	void OnDestroy()
+	{
+		if(levelManager!= null)
+		{
+			levelManager.OnStartGame -= StartGame;
+			levelManager = null;
+		}
+	}
+
+#endregion
 
 	public int GetPlayerHealth() {
 		return health.Health;

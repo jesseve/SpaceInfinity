@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerHealth : MonoBehaviour {
-
+public class PlayerHealth 
+{
 	private PlayerManager manager;
 
 	private int health;
 	public int Health { get { return health; } }
 	public int maxHits = 3;
 
-	// Use this for initialization
-	public void Init () {
-		manager = GetComponent<PlayerManager>();
+	public PlayerHealth (PlayerManager playerManager) 
+	{
+		this.manager = playerManager;
 		Reset ();
 	}
 

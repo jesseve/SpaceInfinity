@@ -2,9 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 
+// Instead of using the LevelManager and check each frame if somethign changed
+// Better to have the level Manager triggering an event that the CanvasManager is listening
+// registration is done in start and OnDestroy to unregister
 public class CanvasManager : MonoBehaviour {
 
 	private LevelManager levelManager;
+
+	[SerializeField] private GameObject startBtn = null;
 
 	public Canvas menuCanvas;
 	public Canvas pauseCanvas;
@@ -12,29 +17,31 @@ public class CanvasManager : MonoBehaviour {
 	public Canvas gameplayCanvas;
 
 	// Use this for initialization
-	public void Init () {
-		levelManager = Instances.scripts.levelmanager;
-//		levelManager.changeState += ChangeGameState;
+	private void Start () {
+		GameObject manager = GameObject.Find("GameManager");
+		levelManager = manager.GetComponent<LevelManager>();
+		levelManager.OnStartGame += HandleOnStartGame;
 
-		ChangeGameState();
+		if(startBtn == null)
+		{
+			startBtn = transform.Find ("StartButton").gameObject;
+		}
 	}
 
-	private void ChangeGameState() {
-		/*switch(levelManager.GetState()) {
-		case State.Menu:
-			SetCanvas(menuCanvas);
-			break;
-		case State.Pause:
-			SetCanvas(pauseCanvas);
-			break;
-		case State.Running:
-			SetCanvas(gameplayCanvas);
-			break;
-		case State.GameOver:
-			SetCanvas(gameoverCanvas);
-			break;
-		}*/
+	private void OnDestroy()
+	{
+		if(levelManager != null)
+		{
+			levelManager.OnStartGame -= HandleOnStartGame;
+			levelManager = null;
+		}
 	}
+
+	private void HandleOnStartGame ()
+	{
+		startBtn.SetActive(false);
+	}
+
 
 	private void SetCanvas(Canvas canvas) {
 		menuCanvas.enabled = false;

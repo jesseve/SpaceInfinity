@@ -23,7 +23,7 @@ public class CollidableObject : MonoBehaviour {
 
 	public Vector3 spawnPoint;
 
-	protected Rigidbody2D rigidbody;
+	protected Rigidbody2D rig = null;
 
 	public virtual void OnTriggerEnter2D(Collider2D other) {
 		if(other.tag.Equals("Player")) {
@@ -51,7 +51,7 @@ public class CollidableObject : MonoBehaviour {
 		topY = spawner.topY;
 		minY = spawner.minY - (transform.localScale.y * 0.5f);
 
-		rigidbody = GetComponent<Rigidbody2D>();
+		rig = GetComponent<Rigidbody2D>();
 	}
 
 	public virtual void HitPlayer(){
@@ -70,7 +70,7 @@ public class CollidableObject : MonoBehaviour {
 		if(IsInvoking("IsOutOfBounds"))
 		   CancelInvoke("IsOutOfBounds");
 		isUsed = false;
-		rigidbody.velocity = Vector2.zero;
+		rig.velocity = Vector2.zero;
 		transform.position = Vector3.up * 200;
 
 		spawner.ReturnToPool(this.gameObject);

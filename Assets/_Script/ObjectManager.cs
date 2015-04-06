@@ -1,30 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ObjectManager : MonoBehaviour {
+public class ObjectManager : MonoBehaviour 
+{
+	private Transform playerTr = null;
 
-	private float halfWidth = 0;
-
-	private Transform player;
-
-	void Start() {
-		player = Instances.scripts.player.transform;
-		halfWidth = Screen.width * 0.5f;
+	void Start() 
+	{
+		GameObject player = GameObject.Find("Player");
+		playerTr = player.transform;
 	}
 
-	private void Update() {
-		if(Mathf.Approximately(player.eulerAngles.z, 0)) {
+	private void Update() 
+	{
+		if(Mathf.Approximately(playerTr.eulerAngles.z, 0)) 
+		{
 			return;
 		}
-		float polarity = player.eulerAngles.z;
+		float polarity = playerTr.eulerAngles.z;
 
 		if(polarity > 50)
+		{
 			polarity = (360 - polarity) * -1;
+		}
 		polarity /= 45;
 
 		float speed = polarity * 2f;
-
-
 		transform.Translate(Vector3.right * speed * Time.deltaTime);
 	}
 }

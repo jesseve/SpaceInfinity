@@ -10,7 +10,7 @@ public class ObjectSpawner : MonoBehaviour {
 
 	public GameObject objectParent;
 
-	private LevelManager manager;
+	private LevelManager levelManager = null;
 
 	//All values in world space
 	public float maxX;				//The x-coordinate of the right side of screen
@@ -27,20 +27,21 @@ public class ObjectSpawner : MonoBehaviour {
 	private string spawningMethod = "SpawningUpdate";
 
 	// Use this for initialization
-	public void Init () {
-		manager = Instances.scripts.levelmanager;
+	private void Start () {
+		GameObject gameManager = GameObject.Find ("GameManager");
+		levelManager = gameManager.GetComponent<LevelManager>();
+		levelManager.OnStartGame += StartGame;
+		levelManager.OnGameOver += GameOver;
 
-		maxX = manager.upperRightCorner.x;
-		minX = manager.bottomLeftCorner.x;
-		topY = manager.upperRightCorner.y;
-		minY = manager.bottomLeftCorner.y;
+		maxX = levelManager.upperRightCorner.x;
+		minX = levelManager.bottomLeftCorner.x;
+		topY = levelManager.upperRightCorner.y;
+		minY = levelManager.bottomLeftCorner.y;
 
 		upperSpawnPoint = new Vector3(0, topY);
 		sideSpawnPoint = new Vector3(minX, 0);
 
 		CreateObjectPool();
-
-		StartGame();
 	}
 	
 	// Update is called once per frame
@@ -50,19 +51,33 @@ public class ObjectSpawner : MonoBehaviour {
 		}
 	}
 
-	public void StartGame() {
+	void OnDestroy()
+	{
+		if(levelManager!= null)
+		{
+			levelManager.OnStartGame -= StartGame;
+			levelManager.OnGameOver -= GameOver;
+			levelManager = null;
+		}
+	}
+
+	private void StartGame() 
+	{
 		Invoke (spawningMethod, 5);
 	}
 
-	public void GameOver() {
+	private void GameOver() 
+	{
 		ResetPool();
 	}
 
-	public void ResetPool() {
+	private void ResetPool() 
+	{
 
 	}
 
-	private void SpawningUpdate() {
+	private void SpawningUpdate() 
+	{
 		bool chance = Random.Range(0, 2) > 0;
 
 		if(chance == true) {

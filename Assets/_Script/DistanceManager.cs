@@ -2,13 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class DistanceManager : MonoBehaviour {
-
-	//Reference to player manager
-	private PlayerManager manager;
-	//Reference to levelmanager
-	private LevelManager levelManager;
-
+public class DistanceManager : StateMachine 
+{
 	//checkpoints when the player reaches the next athmosphere
 	public float[] checkpoints;
 
@@ -23,18 +18,36 @@ public class DistanceManager : MonoBehaviour {
 	private float speed;
 	//Getter for speed;
 	public float Speed { get { return speed; } }
+	private LevelManager levelManager = null;
 
-	// Use this for initialization
-	public void Init () {
+	private void Start () 
+	{
 		speed = 5;
-
-		manager = GetComponent<PlayerManager>();
-		levelManager = Instances.scripts.levelmanager;
+		GameObject gameManager = GameObject.Find ("GameManager");
+		levelManager = gameManager.GetComponent<LevelManager>();
+		levelManager.OnStartGame += HandleOnStartGame;
+		InitStateMachine(true);
 	}
 
-	void Update() {
+	private void Update()
+	{
+		StateUpdate();
+	}
+	void HandleOnStartGame ()
+	{
+		RequestState ("Running");
+	}
+
+	private void UpdateRunning() 
+	{
 		distance += speed * Time.deltaTime;
 		distanceMeter.text = "Distance:" + distance.ToString("n0");
 	}
-
+	protected override void InitStateMachine(bool debug)
+	{
+		InitializeStateMachine(debug);
+		AddStateWithTransitions("StartGame", new string[]{"Running"});
+		AddStateWithTransitions("Running", new string[]{"StartGame"});
+		RequestState ("StartGame");
+	}
 }
