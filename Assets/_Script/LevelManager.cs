@@ -7,10 +7,6 @@ public class LevelManager : GameManager {
 	public Vector3 upperRightCorner;
 	public Vector3 bottomLeftCorner;
 
-	private ObjectSpawner spawner;
-	private PlayerManager player;
-	private CanvasManager canvas;
-
 	public event Action OnStartGame = ()=>{};
 	public event Action OnGameOver = ()=>{};
 

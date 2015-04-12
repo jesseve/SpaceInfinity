@@ -3,108 +3,32 @@ using System.Collections;
 
 public class BackGroundScript : MonoBehaviour {
 
-    public SpriteRenderer sprite1;
-    public SpriteRenderer sprite2;
-    public SpriteRenderer sprite3;
+	private MeshRenderer rend;
+	private Vector2 velocity;
 
-    private Transform t1;
-    private Transform t2;
-    private Transform t3;
+	[Range(0, 1)]
+	public float verticalSpeed;
+	private float horizontalSpeed = 0;
 
-    private Vector3 startPosition;
-    private Vector3 endPosition;
+	private Transform player;
 
-    private float levelHeight;
-    private float levelTop;
-    private float levelBottom;
-
-    public float scrollingSpeed = -0.2f;
-    private float targetSpeed;
-
-	// Use this for initialization
-	void Start () {
-        ChangeBackground(sprite1.sprite);
-        t1 = sprite1.transform;
-        t2 = sprite2.transform;
-        t3 = sprite3.transform;
-
-        levelTop = Camera.main.ScreenToWorldPoint(Vector3.up * Screen.height).y;
-        levelBottom = Camera.main.ScreenToWorldPoint(Vector3.zero).y;
-        levelHeight = (levelTop - levelBottom);
-        
-		t1.position = Vector3.zero;
-        t2.position = t1.position + Vector3.up * levelHeight;
-        t3.position = t1.position - Vector3.up * levelHeight;
-        
-		startPosition = t2.position * 0.5f;
-        endPosition = -t2.position *0.5f;
-        targetSpeed = scrollingSpeed;
-        scrollingSpeed = 0;
-        
-	}
-	
-	/// <summary>
-	/// Manages the positions of the backgrounds
-	/// </summary>
-	void FixedUpdate () {
-        AccelerateScrolling();
-        t1.Translate(0, -scrollingSpeed, 0);       
-        if (t1.position.y <= endPosition.y)
-            t1.position = startPosition;
-        /*if (t1.position.y >= 0)
-            t2.position = t1.position - Vector3.up * levelHeight;
-        else
-            t2.position = t1.position + Vector3.up * levelHeight;*/
-        t2.position = t1.position - Vector3.up * levelHeight;
-        t3.position = t1.position + Vector3.up * levelHeight;
+	void Start() {
+		rend = GetComponent<MeshRenderer>();
+		player = GameObject.Find("Player").transform;
 	}
 
-    void OnEnable() { 
-        //LevelManager.instance.changePhase += AddSpeed;
-        //LevelManager.instance.gameOver += Reset;
-    }
+	void Update() {
 
-    /// <summary>
-    /// Calculates a new scale for the backgrounds based on the sprite given as a parameter
-    /// Background has the same width as game area and same height as the screen
-    /// </summary>
-    /// <param name="s"></param>
-    public void ChangeBackground(Sprite s) {
-        sprite1.sprite = s;
-        sprite2.sprite = s;
-        sprite3.sprite = s;
-        float height = (Camera.main.ScreenToWorldPoint(Vector3.up * Screen.height).y - Camera.main.ScreenToWorldPoint(Vector3.zero).y);
-		float area = 5;
-		Debug.Log(area);
-        float spriteWidth = s.rect.width;
-        float spriteHeight = s.rect.height;
-        float newScaleX = area / (spriteWidth * 0.01f);
-        float newScaleY = height / (spriteHeight * 0.01f);
-        transform.localScale = new Vector3(newScaleX, newScaleY);
-    }
-
-    /// <summary>
-    /// Accelerate the scrolling speed of backgrounds
-    /// </summary>
-    private void AccelerateScrolling() {       
-        if (Mathf.Abs(scrollingSpeed) < Mathf.Abs(targetSpeed))
-            scrollingSpeed += 0.0001f * Mathf.Sign(targetSpeed);      
-    }
-
-    /// <summary>
-    /// Adds speed to backgrounds scrolling
-    /// The longer the game lasts the faster background scrolls
-    /// </summary>
-    private void AddSpeed() {
-        targetSpeed += Mathf.Sign(targetSpeed) * 0.001f;
-    }
-
-    /// <summary>
-    /// Resets the scrolling speed when game is over
-    /// </summary>
-    private void Reset() {
-        targetSpeed = scrollingSpeed;
-        scrollingSpeed = 0;
-    }
-
+		if(!Mathf.Approximately(player.eulerAngles.z, 0)) {
+			float angle = player.eulerAngles.z > 180 ? 360 - player.eulerAngles.z : player.eulerAngles.z;
+			horizontalSpeed = player.eulerAngles.z > 180 ? 0.01f : -0.01f;
+			velocity.x += horizontalSpeed * angle * Time.deltaTime;
+			if(velocity.x > 1)
+				velocity.x = 0;
+			else if(velocity.x < 0)
+				velocity.x = 1;
+		}
+		velocity.y = Mathf.Repeat(Time.time * verticalSpeed, 1);
+		rend.sharedMaterial.SetTextureOffset("_MainTex", velocity);
+	}
 }

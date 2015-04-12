@@ -1,4 +1,4 @@
-using UnityEngine;
+ using UnityEngine;
 using System.Collections;
 using System;
 
@@ -6,8 +6,6 @@ using System;
 public class GameManager : StateMachine
 {
 	public static readonly Vector2 screenScale = new Vector2(1920, 1080);
-	public delegate void ResolutionChanged();
-	public static event ResolutionChanged resolutionChanged = delegate { };
 
 	private int screenWidth;
 	private int screenHeight;
@@ -21,14 +19,6 @@ public class GameManager : StateMachine
 	
 	protected virtual void Update()
 	{
-		// This is somehow useless since you cannot change screen size on a mobile
-		if (Screen.width != screenWidth || Screen.height != screenHeight)
-		{
-			screenWidth = Screen.width;
-			screenHeight = Screen.height;
-			if(resolutionChanged != null)
-				resolutionChanged();
-		}
 		// This one to be called or no update is run for the state machine
 		StateUpdate();
 	}
