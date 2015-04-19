@@ -10,14 +10,19 @@ public class ObjectMeteor : CollidableObject {
 		base.Init ();
 		spawnPoint = spawner.upperSpawnPoint;
 	}
-	
-	public override void Spawn ()
-	{
-		spawnPoint.x = Random.Range(minX, maxX);
+
+    protected override void CalculateSpawnPoint()
+    {
+        spawnPoint.x = Random.Range(minX * 2, maxX * 2);
+    }
+
+    public override void Spawn ()
+	{		
 		base.Spawn();
+
 		targetPoint = new Vector3(Random.Range(minX, maxX), -topY);
 		float distance = Vector3.Distance(transform.position, targetPoint);
 		speed = distance / time;
-		GetComponent<Rigidbody2D>().velocity = (targetPoint - transform.position).normalized * speed;
+		rig.velocity = (targetPoint - transform.position).normalized * speed;
 	}
 }

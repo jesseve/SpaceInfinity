@@ -60,11 +60,16 @@ public class CollidableObject : MonoBehaviour {
 	}
 
 	public virtual void Spawn() {
+        CalculateSpawnPoint();
+
 		transform.position = spawnPoint;
 		isUsed = true;
-		InvokeRepeating("IsOutOfBounds", 1, 2);
-		//Debug.Log("Spawnpoint: " + spawnPoint + " Position" + transform.position);
+		InvokeRepeating("IsOutOfBounds", 1, 2);		
 	}
+
+    protected virtual void CalculateSpawnPoint() {
+        throw new System.NotImplementedException();
+    }
 
 	public virtual void ReturnToPool() {
 		if(IsInvoking("IsOutOfBounds"))

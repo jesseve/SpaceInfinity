@@ -41,11 +41,8 @@ public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
 	}
 
 	public void HitObject(int damage) {
-		health.ApplyDamage(damage);
-	}
-
-	public void PlayerDie() {
-		levelManager.GameOver();
+        if (health.ApplyDamage(damage))
+            levelManager.GameOver();
 	}
 
 	private void RotateShip(Vector3 tapPosition) {

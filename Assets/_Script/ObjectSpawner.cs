@@ -42,6 +42,8 @@ public class ObjectSpawner : MonoBehaviour {
 		sideSpawnPoint = new Vector3(minX, 0);
 
 		CreateObjectPool();
+
+        StartGame();
 	}
 	
 	// Update is called once per frame
@@ -94,7 +96,7 @@ public class ObjectSpawner : MonoBehaviour {
 				GameObject g = ObjectPool.Instance.PopFromPool(objectsToSpawn[i]);
 				g.GetComponent<CollidableObject>().Init();
 
-				g.name = g.name.Split('(')[0];
+                g.name = g.name.Split('(')[0];  //Remove the '(Clone)' part of the name
 
 				ObjectPool.Instance.PushToPool(ref objectsToSpawn[i], ref g, objectParent.transform);
 			}

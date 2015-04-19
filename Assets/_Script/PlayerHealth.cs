@@ -19,13 +19,15 @@ public class PlayerHealth
 		health = maxHits;
 	}
 
-	public void ApplyDamage(int damage) {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <returns>True if the player dies</returns>
+	public bool ApplyDamage(int damage) {
 		health -= damage;
-		if(health <= 0)
-			Die();
-	}
-
-	public void Die() {
-		manager.PlayerDie();
+        if (health <= 0)
+            return true;
+        return false;
 	}
 }

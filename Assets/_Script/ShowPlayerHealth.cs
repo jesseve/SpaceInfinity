@@ -10,7 +10,7 @@ public class ShowPlayerHealth : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		player = Instances.scripts.player;
+		player = GameObject.Find("Player").GetComponent<PlayerManager>();
 		text = GetComponent<Text>();
 	}
 	

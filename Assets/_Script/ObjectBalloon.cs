@@ -11,10 +11,15 @@ public class ObjectBalloon : CollidableObject {
 		speed = (topY * 2) / time;
 	}
 
-	public override void Spawn ()
+    protected override void CalculateSpawnPoint()
+    {
+        spawnPoint.x = Random.Range(minX * 1.5f, maxX * 1.5f);
+    }
+
+    public override void Spawn ()
 	{
-		spawnPoint.x = Random.Range(minX, maxX);
 		base.Spawn();
-		GetComponent<Rigidbody2D>().velocity = Vector2.up * -speed;
+
+		rig.velocity = Vector2.up * -speed;
 	}
 }

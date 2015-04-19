@@ -22,7 +22,7 @@ ITouchInputEventHandler
 	private void Awake()
 	{
 		#if !UNITY_EDITOR
-		fingerID = 0;
+		//fingerID = 0;
 		#endif
 		
 		GameObject [] objs = GameObject.FindObjectsOfType<GameObject>(); 

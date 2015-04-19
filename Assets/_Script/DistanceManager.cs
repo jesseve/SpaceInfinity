@@ -26,7 +26,7 @@ public class DistanceManager : StateMachine
 		GameObject gameManager = GameObject.Find ("GameManager");
 		levelManager = gameManager.GetComponent<LevelManager>();
 		levelManager.OnStartGame += HandleOnStartGame;
-		InitStateMachine(true);
+		InitStateMachine(true);        
 	}
 
 	private void Update()
