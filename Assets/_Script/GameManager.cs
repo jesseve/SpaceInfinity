@@ -2,14 +2,17 @@
 using System.Collections;
 using System;
 
-[DisallowMultipleComponent]
+
 public class GameManager : StateMachine
 {
 	public static readonly Vector2 screenScale = new Vector2(1920, 1080);
 
 	private int screenWidth;
 	private int screenHeight;
-	
+
+    public event Action<Action> OnEnterStart = (action) => { };
+    public event Action OnEnterRunning = () => {  };
+
 	protected virtual void Start()
 	{        	
 		screenWidth = Screen.width;
@@ -51,14 +54,12 @@ public class GameManager : StateMachine
 		// Place here things you want to happen when entering the state
 		// This is actually done in the previous frame but well
 		// The parameter is used by the state machine but you may need it as well
+        Action action = () => { Debug.Log("Call"); RequestState(GameState.Running); };
+        OnEnterStart(action);
 	}
-	private void UpdateStart()
+    private void EnterRunning(string oldState)
 	{
-		// Here whatever you want each frame for that state
-	}
-	private void ExitStart(string oldState)
-	{
-		// Here whatever should be called when leaving that state
+        OnEnterRunning();
 	}
 
 

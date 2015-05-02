@@ -4,6 +4,8 @@ using System.Collections;
 
 public class DistanceManager : StateMachine 
 {
+    [SerializeField]
+    private LevelManager levelManager = null;
 	//checkpoints when the player reaches the next athmosphere
 	public float[] checkpoints;
 
@@ -18,14 +20,18 @@ public class DistanceManager : StateMachine
 	private float speed;
 	//Getter for speed;
 	public float Speed { get { return speed; } }
-	private LevelManager levelManager = null;
 
-	private void Start () 
+
+	private void Awake () 
 	{
 		speed = 5;
-		GameObject gameManager = GameObject.Find ("GameManager");
-		levelManager = gameManager.GetComponent<LevelManager>();
-		levelManager.OnStartGame += HandleOnStartGame;
+        if (levelManager == null) 
+        {
+            GameObject gameManager = GameObject.Find("GameManager");
+            levelManager = gameManager.GetComponent<LevelManager>();
+        }
+		
+		levelManager.OnEnterRunning += HandleOnEnterRunning;
 		InitStateMachine(true);        
 	}
 
@@ -33,11 +39,10 @@ public class DistanceManager : StateMachine
 	{
 		StateUpdate();
 	}
-	void HandleOnStartGame ()
+    void HandleOnEnterRunning()
 	{
-		RequestState ("Running");
+		RequestState (DistanceState.Running);
 	}
-
 	private void UpdateRunning() 
 	{
 		distance += speed * Time.deltaTime;
@@ -46,8 +51,15 @@ public class DistanceManager : StateMachine
 	protected override void InitStateMachine(bool debug)
 	{
 		InitializeStateMachine(debug);
-		AddStateWithTransitions("StartGame", new string[]{"Running"});
-		AddStateWithTransitions("Running", new string[]{"StartGame"});
-		RequestState ("StartGame");
+		AddStateWithTransitions(DistanceState.StartGame, new string[]{DistanceState.Running});
+		AddStateWithTransitions(DistanceState.Running, new string[]{DistanceState.StartGame});
+        RequestState(DistanceState.StartGame);
 	}
+
+    class DistanceState 
+    {
+        public const string StartGame = "StartGame";
+        public const string Running = "Running";
+
+    }
 }

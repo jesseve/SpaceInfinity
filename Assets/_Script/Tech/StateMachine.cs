@@ -133,15 +133,30 @@ public abstract class StateMachine : MonoBehaviour
 		OnUpdate = currentState.updateMethod;
 		return true;
 	}
-	
+
+    private MethodInfo GetMethodInfoInheritance(string method, Type type) 
+    {
+        Type baseType = type;
+        MethodInfo update = null;
+        while ((baseType.ToString() != "StateMachine") || baseType == null)
+        {
+            update = baseType.GetMethod(method, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            if (update != null)
+            {
+                break;
+            }
+            baseType = baseType.BaseType;
+        }
+        return update;
+    }
 	protected void AddState(string newstate) 
 	{
 		State s = new State( newstate );
-		System.Type ourType = this.GetType(); 
-		
-		MethodInfo update = ourType.GetMethod("Update" + newstate, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-		MethodInfo enter = ourType.GetMethod("Enter" + newstate, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-		MethodInfo exit = ourType.GetMethod("Exit" + newstate, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+		Type ourType = this.GetType();
+       
+        MethodInfo update = GetMethodInfoInheritance("Update" + newstate, ourType);
+        MethodInfo enter = GetMethodInfoInheritance("Enter" + newstate, ourType);
+        MethodInfo exit = GetMethodInfoInheritance("Exit" + newstate, ourType);
 		
 		if (update != null)
 		{

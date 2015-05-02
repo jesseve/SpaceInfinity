@@ -2,7 +2,8 @@
 using System.Collections;
 using System;
 
-public class LevelManager : GameManager {
+public class LevelManager : GameManager 
+{
 	
 	public Vector3 upperRightCorner;
 	public Vector3 bottomLeftCorner;
@@ -15,6 +16,7 @@ public class LevelManager : GameManager {
 		base.Start();
 		upperRightCorner = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
 		bottomLeftCorner = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        OnStartGame();
 	}
 
 
@@ -26,7 +28,6 @@ public class LevelManager : GameManager {
 	public void Pause() 
 	{
 	}
-
 	public void GameOver() {
 
 		OnGameOver();

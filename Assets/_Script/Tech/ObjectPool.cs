@@ -74,7 +74,7 @@ public sealed class ObjectPool
 		GameObject o = null;
 		if( forceInstantiate == true)
 		{
-			o = Object.Instantiate(prefab);
+			o = (GameObject)Object.Instantiate(prefab);
 			return o;
 		}
 		List<GameObject> list = FindInContainer(ref prefab);

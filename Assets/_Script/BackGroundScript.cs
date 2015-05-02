@@ -13,6 +13,7 @@ public class BackGroundScript : MonoBehaviour {
 	private Transform player;
 
 	void Start() {
+        SetSpriteForCamera();
 		rend = GetComponent<MeshRenderer>();
 		player = GameObject.Find("Player").transform;
 	}
@@ -31,4 +32,18 @@ public class BackGroundScript : MonoBehaviour {
 		velocity.y = Mathf.Repeat(Time.time * verticalSpeed, 1);
 		rend.sharedMaterial.SetTextureOffset("_MainTex", velocity);
 	}
+
+    void SetSpriteForCamera() 
+    {
+        Renderer sr = GetComponent<Renderer>();
+        if (sr == null) { return; } 
+
+        float worldScreenHeight = Camera.main.orthographicSize * 2.0f;
+        float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
+
+        Vector3 vec = Vector3.one;
+        vec.x = worldScreenWidth + 1f;
+        vec.y =  worldScreenHeight + 1f;
+        transform.localScale = vec;
+    }
 }
