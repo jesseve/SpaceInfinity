@@ -32,6 +32,7 @@ public class DistanceManager : StateMachine
         }
 		
 		levelManager.OnEnterRunning += HandleOnEnterRunning;
+        levelManager.OnGameOver += HandleOnGameOver;
 		InitStateMachine(true);        
 	}
 
@@ -43,6 +44,10 @@ public class DistanceManager : StateMachine
 	{
 		RequestState (DistanceState.Running);
 	}
+    private void HandleOnGameOver() {
+        RequestState(DistanceState.GameOver);
+        SaveLoad.SaveCurrentScore(distance);
+    }
 	private void UpdateRunning() 
 	{
 		distance += speed * Time.deltaTime;
@@ -52,7 +57,8 @@ public class DistanceManager : StateMachine
 	{
 		InitializeStateMachine(debug);
 		AddStateWithTransitions(DistanceState.StartGame, new string[]{DistanceState.Running});
-		AddStateWithTransitions(DistanceState.Running, new string[]{DistanceState.StartGame});
+		AddStateWithTransitions(DistanceState.Running, new string[]{DistanceState.StartGame, DistanceState.GameOver});
+        AddStateWithTransitions(DistanceState.GameOver, new string[] {DistanceState.Running});
         RequestState(DistanceState.StartGame);
 	}
 
@@ -60,6 +66,6 @@ public class DistanceManager : StateMachine
     {
         public const string StartGame = "StartGame";
         public const string Running = "Running";
-
+        public const string GameOver = "GameOver";
     }
 }

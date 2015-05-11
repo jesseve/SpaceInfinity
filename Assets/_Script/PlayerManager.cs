@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
@@ -10,7 +11,7 @@ public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
 #region Unity lifecycle
 
 	private void Start () {
-		health = new PlayerHealth(this);
+		health = new PlayerHealth();
 		GameObject gameManager = GameObject.Find ("GameManager");
 		levelManager = gameManager.GetComponent<LevelManager>();
 		levelManager.OnStartGame += StartGame;
@@ -41,7 +42,7 @@ public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
 	}
 
 	public void HitObject(int damage) {
-        if (health.ApplyDamage(damage))
+        if (health.ApplyDamage(damage))  //If true, player has taken too many hits
             levelManager.GameOver();
 	}
 

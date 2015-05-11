@@ -7,16 +7,11 @@ public class GameManager : StateMachine
 {
 	public static readonly Vector2 screenScale = new Vector2(1920, 1080);
 
-	private int screenWidth;
-	private int screenHeight;
-
     public event Action<Action> OnEnterStart = (action) => { };
     public event Action OnEnterRunning = () => {  };
 
 	protected virtual void Start()
 	{        	
-		screenWidth = Screen.width;
-		screenHeight = Screen.height;
 		InitStateMachine (true);
 	}
 	

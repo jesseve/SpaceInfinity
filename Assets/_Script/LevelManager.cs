@@ -31,5 +31,10 @@ public class LevelManager : GameManager
 	public void GameOver() {
 
 		OnGameOver();
-	} 
+        ShowRetryScreen();
+	}
+
+    private void ShowRetryScreen() {
+        Application.LoadLevel("RetryScreen");
+    }
 }
