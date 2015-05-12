@@ -41,7 +41,11 @@ public sealed class ObjectPool
 		}
 	}
 
-	private ObjectPool() {}
+    public void Reset() {
+        instance = null;
+    }
+
+	private ObjectPool() {}    
 
 	private List<GameObject> FindInContainer(ref GameObject prefab)
 	{
