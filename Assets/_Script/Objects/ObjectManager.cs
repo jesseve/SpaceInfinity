@@ -17,15 +17,30 @@ public class ObjectManager : MonoBehaviour
 		{
 			return;
 		}
-		float polarity = playerTr.eulerAngles.z;
+		float angle = playerTr.eulerAngles.z;
 
-		if(polarity > 50)
+		if(angle > 50)
 		{
-			polarity = (360 - polarity) * -1;
+			angle = (360 - angle) * -1;
 		}
-		polarity /= 45;
+		angle /= 45;
 
-		float speed = polarity * 2f;
+		float speed = angle * 2f;
 		transform.Translate(Vector3.right * speed * Time.deltaTime);
 	}
+
+    public void EnableSlow() {
+        Rigidbody2D[] rbs = transform.GetComponentsInChildren<Rigidbody2D>();
+        foreach (Rigidbody2D r in rbs) {
+            r.velocity *= 0.5f;
+        }
+    }
+
+    public void DisableSlow() {
+        Rigidbody2D[] rbs = transform.GetComponentsInChildren<Rigidbody2D>();
+        foreach (Rigidbody2D r in rbs)
+        {
+            r.velocity *= 2;
+        }
+    }
 }

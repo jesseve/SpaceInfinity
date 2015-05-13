@@ -3,7 +3,9 @@ using System;
 using System.Collections;
 
 public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
-	
+
+    public float speed = 5.0f;
+
 	private PlayerHealth health = null;
 	private Movement movement = null;
 	private LevelManager levelManager = null;
@@ -18,7 +20,7 @@ public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
 
 		if(movement == null) 
 		{
-			movement = new Movement(this.gameObject, 5.0f);
+			movement = new Movement(this.gameObject, speed);
 		}
 	}
 

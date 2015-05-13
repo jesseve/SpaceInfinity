@@ -15,16 +15,21 @@ public class ObjectSpawner : MonoBehaviour {
 	private LevelManager levelManager = null;
 
 	//All values in world space
-	public float maxX;				//The x-coordinate of the right side of screen
-	public float minX;				//The x-coordinate of the left side of screen
-	public float topY;				//The y-coordinate of top of screen
-	public float minY;				//The y-coordinate of the bottom of the screen
+	public float maxX { get; private set; }				    //The x-coordinate of the right side of screen
+	public float minX { get; private set; }                 //The x-coordinate of the left side of screen
+    public float topY { get; private set; }				    //The y-coordinate of top of screen
+	public float minY { get; private set; }				    //The y-coordinate of the bottom of the screen
 
+    [HideInInspector]
 	public Vector3 upperSpawnPoint;
+    [HideInInspector]
 	public Vector3 sideSpawnPoint;
 
 	private int maxEnemies = 3;
 	private int enemiesUsed = 0;
+
+    public int enemySpawnInterval = 1;
+    public int powerUpSpawnInterval = 10;
 
     private bool powerUpOnScreen = false;
 
@@ -71,7 +76,7 @@ public class ObjectSpawner : MonoBehaviour {
 	private void StartGame() 
 	{
 		Invoke (enemySpawningMethod, 5);
-        Invoke(powerUpSpawningMethod, 10);
+        Invoke(powerUpSpawningMethod, 1);
 	}
 
 	private void GameOver() 
@@ -91,7 +96,7 @@ public class ObjectSpawner : MonoBehaviour {
 		if(chance == true) {
 			SpawnEnemy();
 		}
-		Invoke (enemySpawningMethod, 1);
+		Invoke (enemySpawningMethod, enemySpawnInterval);
 	}
 
     private void PowerUpSpawningUpdate()
@@ -102,7 +107,7 @@ public class ObjectSpawner : MonoBehaviour {
         {
             SpawnPowerUp();
         }
-        Invoke(powerUpSpawningMethod, 10);
+        Invoke(powerUpSpawningMethod, powerUpSpawnInterval);
     }
 
     private void CreateObjectPool() {
