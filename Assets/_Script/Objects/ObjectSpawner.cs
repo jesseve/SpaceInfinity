@@ -48,7 +48,7 @@ public class ObjectSpawner : MonoBehaviour {
 
 		CreateObjectPool();
 
-        //StartGame();
+        StartGame();
 	}
 	
 	// Update is called once per frame
@@ -71,6 +71,7 @@ public class ObjectSpawner : MonoBehaviour {
 	private void StartGame() 
 	{
 		Invoke (enemySpawningMethod, 5);
+        Invoke(powerUpSpawningMethod, 10);
 	}
 
 	private void GameOver() 
@@ -93,7 +94,18 @@ public class ObjectSpawner : MonoBehaviour {
 		Invoke (enemySpawningMethod, 1);
 	}
 
-	private void CreateObjectPool() {
+    private void PowerUpSpawningUpdate()
+    {
+        bool chance = Random.Range(0, 2) > 0;
+
+        if (chance == true)
+        {
+            SpawnPowerUp();
+        }
+        Invoke(powerUpSpawningMethod, 10);
+    }
+
+    private void CreateObjectPool() {
 
         //Add enemies to pool
         for (int i = 0; i < enemiesToSpawn.Length; i++) {
