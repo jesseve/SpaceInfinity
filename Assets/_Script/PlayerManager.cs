@@ -12,8 +12,9 @@ public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
 
 #region Unity lifecycle
 
-	private void Start () {
+	private void Awake () {
 		health = new PlayerHealth();
+
 		GameObject gameManager = GameObject.Find ("GameManager");
 		levelManager = gameManager.GetComponent<LevelManager>();
 		levelManager.OnStartGame += StartGame;
@@ -67,7 +68,7 @@ public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
 
 	public void Register (ITouchInputEventHandler handler)
 	{
-		if(movement == null) movement = new Movement(this.gameObject, 25.0f);
+		if(movement == null) movement = new Movement(this.gameObject, speed);
 		handler.OnTap += RotateShip;
 		handler.OnRemove += ResetShip;
 
@@ -76,6 +77,7 @@ public class PlayerManager : MonoBehaviour, ITouchInputEventListener {
 	public void Unregister (ITouchInputEventHandler handler)
 	{
 		handler.OnTap -= RotateShip;
+        handler.OnTap -= ResetShip;
 	}
 
 	#endregion

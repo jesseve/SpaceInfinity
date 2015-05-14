@@ -17,7 +17,7 @@ public class CanvasManager : MonoBehaviour {
 	public Canvas gameplayCanvas;
 
 	// Use this for initialization
-	private void Start () {
+	private void Awake () {
 		GameObject manager = GameObject.Find("GameManager");
 		levelManager = manager.GetComponent<LevelManager>();
 		levelManager.OnStartGame += HandleOnStartGame;

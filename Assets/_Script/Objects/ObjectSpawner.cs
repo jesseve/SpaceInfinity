@@ -37,23 +37,26 @@ public class ObjectSpawner : MonoBehaviour {
     private string powerUpSpawningMethod = "PowerUpSpawningUpdate";
 
 	// Use this for initialization
-	private void Start () {
+	private void Awake () {
 		GameObject gameManager = GameObject.Find ("GameManager");
 		levelManager = gameManager.GetComponent<LevelManager>();
 		levelManager.OnStartGame += StartGame;
 		levelManager.OnGameOver += GameOver;
 
-		maxX = levelManager.upperRightCorner.x;
-		minX = levelManager.bottomLeftCorner.x;
-		topY = levelManager.upperRightCorner.y;
-		minY = levelManager.bottomLeftCorner.y;
+        Vector2 upperRightCorner = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+        Vector2 bottomLeftCorner = Camera.main.ScreenToWorldPoint(Vector3.zero);
+
+        maxX = upperRightCorner.x;
+		minX = bottomLeftCorner.x;
+		topY = upperRightCorner.y;
+		minY = bottomLeftCorner.y;
 
 		upperSpawnPoint = new Vector3(0, topY);
 		sideSpawnPoint = new Vector3(minX, 0);
 
 		CreateObjectPool();
 
-        StartGame();
+        //StartGame();
 	}
 	
 	// Update is called once per frame

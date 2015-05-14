@@ -25,6 +25,8 @@ public class PlayerHealth
 		health -= damage;
         if (health <= 0)
             return true;
+        if (health > maxHits)
+            health = maxHits;
         return false;
 	}
 }
