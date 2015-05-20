@@ -14,9 +14,11 @@ public class BackGroundScript : MonoBehaviour {
 	private Transform player;
     private Rigidbody2D rb;
 
-    public GameObject background;
+    public GameObject backgroundPrefab;
+    public Sprite[] sprites;
 
     private Vector2 respawnPosition;
+    private Vector2 screenWorldSize;
 
     private SpriteRenderer[][] bgSprites; //This is to access the sprites and change them when necessary
 
@@ -43,6 +45,9 @@ public class BackGroundScript : MonoBehaviour {
             transform.position = new Vector3(-respawnPosition.x, transform.position.y, 0);
         }
 
+        if (Input.GetKeyDown(KeyCode.Space))
+            StartCoroutine(TransitToSprite(sprites[1], sprites[2]));
+
         velocity.x = 0;
 
         if (!Mathf.Approximately(player.eulerAngles.z, 0))
@@ -65,7 +70,7 @@ public class BackGroundScript : MonoBehaviour {
         go.transform.localScale = vec;
     }
 
-    void CreateBackgrounds() {
+    private void CreateBackgrounds() {
         bgSprites = new SpriteRenderer[3][];
 
         int index = 0;
@@ -77,7 +82,7 @@ public class BackGroundScript : MonoBehaviour {
             
             for (int j = -1; j < 2; j++) {
                 
-                go = Instantiate(background, Vector3.zero, Quaternion.identity) as GameObject;
+                go = Instantiate(backgroundPrefab, Vector3.zero, Quaternion.identity) as GameObject;
                 
                 SetSpriteForCamera(go);
                 Vector3 scale = go.transform.localScale;
@@ -86,17 +91,37 @@ public class BackGroundScript : MonoBehaviour {
                 go.transform.position = new Vector3(j * scale.x, i * scale.y, 0);
                 go.transform.SetParent(transform);
                 
-                bgSprites[i+1][j+1] = go.GetComponent<SpriteRenderer>();
+                bgSprites[i+1][j+1] = go.GetComponent<SpriteRenderer>();                
 
                 index++;
             }
         }
-        respawnPosition = go.transform.localScale / 2;
+        respawnPosition = go.transform.localScale;
+        screenWorldSize = go.transform.localScale;
+    }
 
-        for (int j = 0; j < 3; j++ )
-        {
-            for (int i = 0; i < 3; i++)
-                Debug.Log("Name of tables X:" + j.ToString() + " Y: " + i.ToString() + " --- " + bgSprites[j][i].name);
+    private IEnumerator TransitToSprite(Sprite transitionBg, Sprite nextBg) {
+        while (transform.position.y <= 0)
+            yield return null;
+
+        ChangeRowSprite(transitionBg, 1);
+        ChangeRowSprite(nextBg, 2);
+
+        while (transform.position.y > 0)
+            yield return null;
+
+        ChangeRowSprite(nextBg, 0);
+
+        while (transform.position.y <= 0)
+            yield return null;
+
+        ChangeRowSprite(nextBg, 1);
+    }
+
+    private void ChangeRowSprite(Sprite s, int row) {
+        row = Mathf.Clamp(row, 0, 2);
+        foreach (SpriteRenderer sr in bgSprites[row]) {
+            sr.sprite = s;
         }
     }
 }
