@@ -84,7 +84,6 @@ public class ObjectSpawner : MonoBehaviour {
 
 	private void GameOver() 
 	{
-		ResetPool();
 	}
 
 	private void ResetPool() 
@@ -114,6 +113,8 @@ public class ObjectSpawner : MonoBehaviour {
     }
 
     private void CreateObjectPool() {
+
+        ResetPool();
 
         //Add enemies to pool
         for (int i = 0; i < enemiesToSpawn.Length; i++) {
