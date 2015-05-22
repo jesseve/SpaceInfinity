@@ -8,6 +8,7 @@ public class DistanceManager : StateMachine
     private LevelManager levelManager = null;
 	//checkpoints when the player reaches the next athmosphere
 	public float[] checkpoints;
+    private int currentCheckpoint;
 
 	public Text distanceMeter;
 
@@ -52,6 +53,13 @@ public class DistanceManager : StateMachine
 	{
 		distance += speed * Time.deltaTime;
 		distanceMeter.text = "Distance:" + distance.ToString("n0");
+
+        if (distance > checkpoints[Mathf.Clamp(currentCheckpoint, 0, checkpoints.Length - 1)]) {
+            if (currentCheckpoint < checkpoints.Length) {
+                EventManager.TriggerEvent("ChangeBackground");
+                currentCheckpoint++;
+            }
+        }
 	}
 	protected override void InitStateMachine(bool debug)
 	{

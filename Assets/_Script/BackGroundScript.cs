@@ -15,12 +15,20 @@ public class BackGroundScript : MonoBehaviour {
     private Rigidbody2D rb;
 
     public GameObject backgroundPrefab;
-    public Sprite[] sprites;
+
+    public BackgroundTransition[] transitions;
+    private int currentTransition;
 
     private Vector2 respawnPosition;
-    private Vector2 screenWorldSize;
 
     private SpriteRenderer[][] bgSprites; //This is to access the sprites and change them when necessary
+
+    void OnEnable() {
+        EventManager.StartListening("ChangeBackground", StartTransition);
+    }
+    void OnDisable() {
+        EventManager.StopListening("ChangeBackground", StartTransition);
+    }
 
 	void Start() {
         respawnPosition = new Vector2();
@@ -43,10 +51,7 @@ public class BackGroundScript : MonoBehaviour {
         }
         else if (transform.position.x > respawnPosition.x) {
             transform.position = new Vector3(-respawnPosition.x, transform.position.y, 0);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            StartCoroutine(TransitToSprite(sprites[1], sprites[2]));
+        }        
 
         velocity.x = 0;
 
@@ -97,10 +102,21 @@ public class BackGroundScript : MonoBehaviour {
             }
         }
         respawnPosition = go.transform.localScale;
-        screenWorldSize = go.transform.localScale;
+    }
+
+    private void StartTransition() {
+        BackgroundTransition bgt = transitions[currentTransition];
+        StartCoroutine(TransitToSprite(bgt.transition, bgt.next));
+        
+        if(currentTransition < transitions.Length - 1)
+            currentTransition++;
     }
 
     private IEnumerator TransitToSprite(Sprite transitionBg, Sprite nextBg) {
+        if (transform.position.y > 0)
+            while (transform.position.y > 0)
+                yield return null;
+
         while (transform.position.y <= 0)
             yield return null;
 

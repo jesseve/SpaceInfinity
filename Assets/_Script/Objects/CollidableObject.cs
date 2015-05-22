@@ -5,7 +5,7 @@ public class CollidableObject : MonoBehaviour {
 
 	public int damage = 1;	//The amount of damage the object does to the player
 	public int size;		//The size of the object's width. The size is percentage of the screen width
-	public int time;		//The time the object takes to travel across the screen
+	public int time = 8;		//The time the object takes to travel across the screen
 
 	protected PlayerManager player;		//Reference to the playermanager
 	protected ObjectSpawner spawner;	//Reference to the spawner script
