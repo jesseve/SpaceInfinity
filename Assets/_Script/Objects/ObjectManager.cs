@@ -27,20 +27,5 @@ public class ObjectManager : MonoBehaviour
 
 		float speed = angle * 2f;
 		transform.Translate(Vector3.right * speed * Time.deltaTime);
-	}
-
-    public void EnableSlow() {
-        Rigidbody2D[] rbs = transform.GetComponentsInChildren<Rigidbody2D>();
-        foreach (Rigidbody2D r in rbs) {
-            r.velocity *= 0.5f;
-        }
-    }
-
-    public void DisableSlow() {
-        Rigidbody2D[] rbs = transform.GetComponentsInChildren<Rigidbody2D>();
-        foreach (Rigidbody2D r in rbs)
-        {
-            r.velocity *= 2;
-        }
-    }
+	}    
 }

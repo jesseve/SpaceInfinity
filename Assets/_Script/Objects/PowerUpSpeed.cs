@@ -4,21 +4,22 @@ using System.Collections;
 public class PowerUpSpeed : CollidableObject {
 
     public int duration;
+    [Range(0,1)]
+    public float amount;
 
-    public override void HitPlayer()
-    {
-        ObjectManager o = GameObject.FindObjectOfType<ObjectManager>();
+    void OnDisable() {
+        CancelInvoke();
+    }
 
-        o.EnableSlow();
+    public override void HitPlayer() {
 
+        spawner.EnableSlow(amount);
         Invoke("DisableSlow", duration);
 
-        ReturnToPool();
+        base.HitPlayer();
     }
 
     private void DisableSlow() {
-        ObjectManager o = GameObject.FindObjectOfType<ObjectManager>();
-
-        o.DisableSlow();
+        spawner.DisableSlow(amount);
     }
 }

@@ -1,22 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ObjectBird : CollidableObject {
+public class ObjectBird : Enemy {
+
+    public float horizotalTime;
+
+    private float horizontalSpeed;
 
 	public override void Init ()
 	{
 		base.Init ();
 		spawnPoint = spawner.sideSpawnPoint;
-		speed = (maxX * 2) / time;
-	}
+        horizontalSpeed = (maxX * 2) / horizotalTime;
+	}	
 
-	public override void Spawn ()
-	{
-		base.Spawn();
-
-		rig.velocity = (Vector2.right * speed) - (Vector2.up * speed * 0.5f);
-
-	}
+    protected override Vector2 CalculateVelocity()
+    {
+        return (Vector2.right * horizontalSpeed) - (Vector2.up * speed * 0.5f);
+    }
 
     protected override void CalculateSpawnPoint()
     {

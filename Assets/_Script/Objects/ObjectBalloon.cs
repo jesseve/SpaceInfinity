@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ObjectBalloon : CollidableObject {
+public class ObjectBalloon : Enemy
+{
 	
 }

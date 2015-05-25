@@ -2,10 +2,9 @@
 using System.Collections;
 
 public class CollidableObject : MonoBehaviour {
-
-	public int damage = 1;	//The amount of damage the object does to the player
+	
 	public int size;		//The size of the object's width. The size is percentage of the screen width
-	public int time = 8;		//The time the object takes to travel across the screen
+	public int travelTimeVertical = 8;		//The time the object takes to travel across the screen
 
 	protected PlayerManager player;		//Reference to the playermanager
 	protected ObjectSpawner spawner;	//Reference to the spawner script
@@ -16,8 +15,12 @@ public class CollidableObject : MonoBehaviour {
 	protected float maxX;
 	protected float minY;
 
+    public bool SlowEnabled { get { return slowEnabled; } }
+    protected bool slowEnabled = false;
+
 	protected float speed;	//The speed the object will travel with
 
+    [HideInInspector]
 	public Vector3 spawnPoint;
 
 	protected Rigidbody2D rig = null;
@@ -50,11 +53,10 @@ public class CollidableObject : MonoBehaviour {
 		rig = GetComponent<Rigidbody2D>();
 
         spawnPoint = spawner.upperSpawnPoint;
-        speed = (topY * 2) / time;
+        speed = (topY * 2) / travelTimeVertical;
     }
 
-	public virtual void HitPlayer(){
-		player.HitObject(damage);
+	public virtual void HitPlayer(){		
 		ReturnToPool();
 	}
 
@@ -64,7 +66,26 @@ public class CollidableObject : MonoBehaviour {
 		transform.position = spawnPoint;
 		InvokeRepeating("IsOutOfBounds", 1, 2);
 
-        rig.velocity = Vector2.up * -speed;
+        rig.velocity = CalculateVelocity();
+    }
+    public virtual void SpawnSlowed(float slowAmount) {
+        Spawn();
+        slowEnabled = true;
+        rig.velocity *= slowAmount;
+    }
+    public void EnableSlow(float slowAmount) {
+        if (slowEnabled == false)
+            rig.velocity *= slowAmount;
+        slowEnabled = true;
+    }
+    public void DisableSlow(float slowAmount) {
+        if(slowEnabled == true)
+            rig.velocity /= slowAmount;
+        slowEnabled = false;
+    }
+
+    protected virtual Vector2 CalculateVelocity() {
+        return -Vector2.up * speed;
     }
 
     protected virtual void CalculateSpawnPoint() {
@@ -80,4 +101,13 @@ public class CollidableObject : MonoBehaviour {
 
 		spawner.ReturnToPool(this.gameObject);
 	}
+}
+
+public class Enemy : CollidableObject {
+    public int damage;
+
+    public override void HitPlayer() {
+        base.HitPlayer();
+        player.HitObject(damage);
+    }
 }

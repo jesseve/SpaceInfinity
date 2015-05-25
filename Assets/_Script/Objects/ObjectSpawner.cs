@@ -31,6 +31,9 @@ public class ObjectSpawner : MonoBehaviour {
     public int enemySpawnInterval = 1;
     public int powerUpSpawnInterval = 10;
 
+    private bool slowEnabled = false;                       //should spawn slowed objects
+    private float slowAmount = 1;                            //Amount in percentage how much the object should be slowed
+
     private bool powerUpOnScreen = false;
 
 	private string enemySpawningMethod = "EnemySpawningUpdate";
@@ -59,12 +62,6 @@ public class ObjectSpawner : MonoBehaviour {
         //StartGame();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		if(Input.GetKeyDown(KeyCode.Space)){
-			SpawnEnemy();
-		}
-	}
 
 	void OnDestroy()
 	{
@@ -155,17 +152,23 @@ public class ObjectSpawner : MonoBehaviour {
 		if(go == null) return;
 
 		CollidableObject co = go.GetComponent<CollidableObject>();
-		co.Spawn();
+
+        if (slowEnabled == false)
+            co.Spawn();
+        else
+            co.SpawnSlowed(slowAmount);
 
 		enemiesUsed++;
 	}
 
     private void SpawnPowerUp() {
-        if (powerUpOnScreen == true) return;    //Allow only one power up on screen at one time
+        if (powerUpOnScreen == true) return;    //Allow only one power up on screen at one time        
 
         GameObject go = ObjectPool.Instance.PopFromPool(powerUpsToSpawn[Random.Range(0, powerUpsToSpawn.Length)]);
 
         if (go == null) return;
+
+        powerUpOnScreen = true;
 
         CollidableObject co = go.GetComponent<CollidableObject>();
         co.Spawn();
@@ -192,5 +195,27 @@ public class ObjectSpawner : MonoBehaviour {
                 return;
             }
         }
+    }
+
+    public void EnableSlow(float amount)
+    {
+        slowAmount = amount;
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject go in enemies) {
+            go.GetComponent<CollidableObject>().EnableSlow(slowAmount);
+        }
+        slowEnabled = true;
+    }
+
+    public void DisableSlow(float amount)
+    {
+        slowAmount = amount;
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject go in enemies) {
+            go.GetComponent<CollidableObject>().DisableSlow(slowAmount);
+        }
+        slowEnabled = false;
     }
 }
