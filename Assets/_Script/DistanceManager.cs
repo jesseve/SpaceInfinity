@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class DistanceManager : StateMachine 
 {
@@ -37,16 +38,12 @@ public class DistanceManager : StateMachine
 		InitStateMachine(true);        
 	}
 
-	private void Update()
-	{
-		StateUpdate();
-	}
     void HandleOnEnterRunning()
 	{
-		RequestState (DistanceState.Running);
+		ChangeCurrentState (DistanceState.Running);
 	}
     private void HandleOnGameOver() {
-        RequestState(DistanceState.GameOver);
+        ChangeCurrentState(DistanceState.GameOver);
         SaveLoad.SaveCurrentScore(distance);
     }
 	private void UpdateRunning() 
@@ -61,19 +58,17 @@ public class DistanceManager : StateMachine
             }
         }
 	}
-	protected override void InitStateMachine(bool debug)
+	protected void InitStateMachine(bool debug)
 	{
-		InitializeStateMachine(debug);
-		AddStateWithTransitions(DistanceState.StartGame, new string[]{DistanceState.Running});
-		AddStateWithTransitions(DistanceState.Running, new string[]{DistanceState.StartGame, DistanceState.GameOver});
-        AddStateWithTransitions(DistanceState.GameOver, new string[] {DistanceState.Running});
-        RequestState(DistanceState.StartGame);
+		InitializeStateMachineWithTransitions(debug);
+		CreateNewStateWithTransitions(DistanceState.StartGame, new Enum[] {DistanceState.Running});
+        CreateNewStateWithTransitions(DistanceState.Running, new Enum[] { DistanceState.StartGame, DistanceState.GameOver });
+        CreateNewStateWithTransitions(DistanceState.GameOver, new Enum[] { DistanceState.Running });
+        ChangeCurrentState(DistanceState.StartGame);
 	}
 
-    class DistanceState 
+    public enum DistanceState 
     {
-        public const string StartGame = "StartGame";
-        public const string Running = "Running";
-        public const string GameOver = "GameOver";
+        StartGame,Running,GameOver
     }
 }
